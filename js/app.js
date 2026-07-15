@@ -1,129 +1,161 @@
-document.addEventListener("DOMContentLoaded", function () {
-    const searchButton = document.getElementById("searchButton");
-    if (searchButton) {
-        searchButton.addEventListener("click", performSearch);
-    }
-    
-    // تفعيل منع النقرات التخريبية تلقائياً لحماية أدسينس
-    setupClickDefender();
-});
+// js/app.js
 
-// وظيفة الملء التلقائي والبحث السريع
-function fillQuickSearch(keyword, country, nationality) {
-    document.getElementById("jobKeyword").value = keyword;
-    document.getElementById("country").value = country;
-    document.getElementById("nationality").value = nationality;
-    performSearch();
+import providers from './providers.js';
+import keywords from './keywords.js';
+
+// متغيرات الحالة العامة للتطبيق
+let currentKeyword = "";
+let currentCountry = "global";
+
+// عناصر واجهة المستخدم (DOM Elements)
+const searchInput = document.getElementById("search-input");
+const countrySelect = document.getElementById("country-select");
+const providersContainer = document.getElementById("providers-container");
+
+/**
+ * تهيئة التطبيق وإعداد الأحداث المباشرة
+ */
+function init() {
+    // الاستماع لحدث الكتابة في حقل البحث
+    if (searchInput) {
+        searchInput.addEventListener("input", (e) => {
+            currentKeyword = e.target.value.trim();
+            renderProviders();
+        });
+    }
+
+    // الاستماع لحدث تغيير الدولة
+    if (countrySelect) {
+        countrySelect.addEventListener("change", (e) => {
+            currentCountry = e.target.value;
+            renderProviders();
+        });
+    }
+
+    // العرض الأولي للمنصات عند تحميل الصفحة
+    renderProviders();
 }
 
-function performSearch() {
-    const keyword = document.getElementById("jobKeyword").value.trim();
-    const country = document.getElementById("country").value;
-    const nationality = document.getElementById("nationality").value;
-    const freshness = document.getElementById("freshness").value;
+/**
+ * بناء وعرض كروت المنصات بناءً على حالة البحث والدولة المختارة
+ */
+function renderProviders() {
+    if (!providersContainer) return;
+    
+    providersContainer.innerHTML = "";
 
-    if (!keyword) {
-        alert("أدخل المسمى الوظيفي أو المهارة أولاً");
+    // تصفية المنصات التي تدعم الدولة المختارة حالياً
+    const activeProviders = providers.filter(provider => 
+        provider.supportedCountries.includes(currentCountry)
+    );
+
+    if (activeProviders.length === 0) {
+        providersContainer.innerHTML = `<p class="no-results">لا توجد منصات تدعم الدولة المحددة حالياً.</p>`;
         return;
     }
 
-    displayResults(keyword, country, nationality, freshness);
-}
-
-function displayResults(keyword, country, nationality, freshness) {
-    const container = document.getElementById("resultsContainer");
-    container.innerHTML = "";
-
-    // جلب الكلمات المرادفة للتخصص لزيادة جودة البحث الذكي
-    let searchTerms = [keyword];
-    if (JobKeywords[keyword]) {
-        searchTerms = [...searchTerms, ...JobKeywords[keyword]];
-    }
-
-    // بناء سياق استعلام البحث الذكي للوظائف
-    const termQuery = searchTerms.map(t => `"${t}"`).join(" OR ");
-    
-    JobProviders.engines.forEach(provider => {
-        // توليد رابط البحث المفلتر من خلال Google Dorking الذكي
-        let finalQuery = `${provider.queryPrefix} (${termQuery})`;
-
-        if (country) {
-            finalQuery += ` "${country}"`;
-        }
-
-        // إضافة تصفية "جنسية الباحث" بطريقة احترافية في الكود
-        if (nationality) {
-            if (nationality === "سوداني") {
-                finalQuery += ` ("سوداني" OR "سودانيين" OR "سودانية" OR "Sudanese")`;
-            } else if (nationality === "مصر") {
-                finalQuery += ` ("مصري" OR "مصريين" OR "مصرية" OR "Egyptian")`;
-            } else {
-                finalQuery += ` "${nationality}"`;
-            }
-        }
-
-        // تركيب الرابط النهائي مع محرك البحث وجوجل مع تحديد الوقت
-        let searchUrl = `${provider.url}?q=${encodeURIComponent(finalQuery)}`;
+    activeProviders.forEach(provider => {
+        const card = document.createElement("div");
+        card.className = "provider-card";
         
-        // ربط تصفية الوقت (آخر 24 ساعة أو آخر أسبوع)
-        if (freshness === "24h") {
-            searchUrl += "&tbs=qdr:d"; // آخر 24 ساعة
-        } else if (freshness === "week") {
-            searchUrl += "&tbs=qdr:w"; // آخر أسبوع
+        // إذا لم يكتب المستخدم كلمة مفتاحية بعد، نجعل الكارت يبدو غير نشط أو نبهه للكتابة
+        if (!currentKeyword) {
+            card.classList.add("disabled");
         }
 
-        // توليد بطاقات النتائج
-        container.innerHTML += `
-            <div class="result-card">
-                <div>
-                    <span class="badge">${provider.name}</span>
-                    <h3>البحث في منصة ${provider.name.split(' ')[0]}</h3>
-                    <p><strong>التخصص:</strong> ${keyword}</p>
-                    <p><strong>الدولة والفلترة:</strong> ${country || "كل الدول"} ${nationality ? `(${nationality}ين)` : ""}</p>
-                    <p><strong>ميزة الفلترة:</strong> ${provider.reason}</p>
-                </div>
-                <a class="cta" href="${searchUrl}" target="_blank">رابط النتائج المباشر ↗</a>
-            </div>
+        card.innerHTML = `
+            <img src="${provider.logo}" alt="${provider.name} Logo" class="provider-logo" onerror="this.src='assets/logos/default.svg'">
+            <h3>${provider.name}</h3>
+            <p>ابحث مباشرة في ${provider.name}</p>
+            <button class="search-btn" ${!currentKeyword ? 'disabled' : ''}>ابحث الآن</button>
         `;
-    });
 
-    // التمرير التلقائي لقسم النتائج لرؤيتها بوضوح
-    document.getElementById("results").scrollIntoView({ behavior: 'smooth' });
-}
-
-// كود حماية أدسينس الذكي لمنع النقرات المتكررة والتخريبية
-function setupClickDefender() {
-    let clickCount = parseInt(localStorage.getItem('ad_clicks') || '0');
-    let lastClickTime = parseInt(localStorage.getItem('ad_click_time') || '0');
-    const currentTime = new Date().getTime();
-
-    // إعادة تعيين العداد إذا مر أكثر من 24 ساعة
-    if (currentTime - lastClickTime > 24 * 60 * 60 * 1000) {
-        clickCount = 0;
-        localStorage.setItem('ad_clicks', '0');
-    }
-
-    // تتبع النقرات على صناديق الإعلانات لحماية الحساب
-    document.querySelectorAll('.ad-box').forEach(adBox => {
-        adBox.addEventListener('click', function() {
-            clickCount++;
-            localStorage.setItem('ad_clicks', clickCount.toString());
-            localStorage.setItem('ad_click_time', currentTime.toString());
-
-            if (clickCount >= 3) {
-                // إخفاء الإعلانات فوراً للمستخدم التخريبي
-                document.querySelectorAll('.ad-box').forEach(box => {
-                    box.style.display = 'none';
-                });
-                console.warn("تم كشف محاولة نقر متكرر لحماية إعلانات أدسينس.");
+        // حدث النقر على الكارت لتشغيل منطق التوجيه الذكي
+        card.addEventListener("click", () => {
+            if (!currentKeyword) {
+                searchInput.focus();
+                return;
             }
+            
+            const finalSearchUrl = createProviderUrl(provider, currentKeyword, currentCountry);
+            window.open(finalSearchUrl, "_blank");
         });
-    });
 
-    // إبقاء الإعلانات مخفية إذا كان هذا المتصفح قد تم حظره مسبقاً خلال الـ 24 ساعة الماضية
-    if (clickCount >= 3) {
-        document.querySelectorAll('.ad-box').forEach(box => {
-            box.style.display = 'none';
-        });
-    }
+        providersContainer.appendChild(card);
+    });
 }
+
+/**
+ * دالة توليد روابط البحث المباشرة والذكية للمنصات
+ * @param {Object} provider - كائن المنصة المختارة
+ * @param {string} arabicKeyword - الكلمة المفتاحية المكتوبة
+ * @param {string} selectedCountry - رمز الدولة المختار
+ * @returns {string} - رابط البحث النهائي المباشر
+ */
+function createProviderUrl(provider, arabicKeyword, selectedCountry) {
+    // 1. جلب المرادف الإنجليزي الذكي للوظيفة لضمان أفضل نتائج بحث
+    const englishKeyword = keywords[arabicKeyword] || arabicKeyword;
+    const encodedKeyword = encodeURIComponent(englishKeyword);
+    
+    // 2. معالجة اسم الدولة بما يتوافق مع معايير كل منصة بدقة
+    let countryParam = "";
+    if (selectedCountry && selectedCountry !== "global") {
+        countryParam = encodeURIComponent(getLocalizedCountryName(selectedCountry, provider.id));
+    }
+
+    // 3. دمج المعاملات في قالب البحث الخاص بالمنصة المستهدفة
+    let finalUrl = provider.searchTemplate
+        .replace("{keyword}", encodedKeyword)
+        .replace("{country}", countryParam);
+
+    // 4. تنظيف الرابط في حالة البحث العالمي (بدون دولة محددة)
+    if (!countryParam || selectedCountry === "global") {
+        finalUrl = finalUrl
+            .replace("&location=", "")
+            .replace("&l=", "")
+            .replace("&country=", "");
+    }
+
+    return finalUrl;
+}
+
+/**
+ * دالة مساعدة لترجمة وتهيئة مسميات الدول للمنصات المختلفة
+ * @param {string} countryCode - رمز الدولة الداخلي
+ * @param {string} providerId - معرف المنصة
+ * @returns {string} - الاسم المناسب للمنصة
+ */
+function getLocalizedCountryName(countryCode, providerId) {
+    const countryNames = {
+        egypt: { 
+            linkedin: "Egypt", 
+            indeed: "Egypt", 
+            bayt: "egypt" 
+        },
+        saudi: { 
+            linkedin: "Saudi Arabia", 
+            indeed: "Saudi Arabia", 
+            bayt: "saudi-arabia" 
+        },
+        uae: { 
+            linkedin: "United Arab Emirates", 
+            indeed: "United Arab Emirates", 
+            bayt: "uae" 
+        },
+        qatar: { 
+            linkedin: "Qatar", 
+            indeed: "Qatar", 
+            bayt: "qatar" 
+        },
+        kuwait: { 
+            linkedin: "Kuwait", 
+            indeed: "Kuwait", 
+            bayt: "kuwait" 
+        }
+    };
+
+    return countryNames[countryCode]?.[providerId] || countryCode;
+}
+
+// تشغيل التطبيق بمجرد جاهزية الصفحة
+document.addEventListener("DOMContentLoaded", init);
