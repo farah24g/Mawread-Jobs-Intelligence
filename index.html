@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مورد الوظائف الذكي | البحث الذكي عن فرص العمل</title>
+    <meta name="description" content="مورد الوظائف الذكي يساعدك على اكتشاف أفضل منصات وفرص العمل حسب الدولة والتخصص وجنسية الباحث.">
+    <link rel="canonical" href="https://jobs.mawread.com/">
+    <meta name="robots" content="index, follow">
+
+    <meta property="og:title" content="مورد الوظائف الذكي">
+    <meta property="og:description" content="محرك ذكي لاكتشاف فرص العمل من أفضل المصادر المحلية والعالمية بفلترة ذكية.">
+    <meta property="og:type" content="website">
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header>
+    <div class="logo">
+        <a href="/">مورد الوظائف الذكي</a>
+    </div>
+    <nav>
+        <a href="#">الرئيسية</a>
+        <a href="#">عن الأداة</a>
+        <a href="#">English</a>
+    </nav>
+</header>
+
+<main>
+    <section class="hero">
+        <h1>اكتشف أفضل فرص العمل من مكان واحد</h1>
+        <p>ابحث حسب الوظيفة والدولة والتخصص والجنسية المطلوبة، ونصل بك إلى أفضل منصات التوظيف المناسبة بفلترة ذكية ومحدثة.</p>
+
+        <section class="search-box">
+            <label>المسمى الوظيفي أو المهارة</label>
+            <input type="search" id="jobKeyword" placeholder="مثال: محاسب، مبرمج، مهندس">
+
+            <div class="filters">
+                <select id="country">
+                    <option value="">اختر الدولة المستهدفة</option>
+                    <option value="السعودية">السعودية</option>
+                    <option value="الإمارات">الإمارات</option>
+                    <option value="مصر">مصر</option>
+                    <option value="قطر">قطر</option>
+                    <option value="الكويت">الكويت</option>
+                    <option value="عمان">عمان</option>
+                </select>
+
+                <select id="nationality">
+                    <option value="">جنسية الباحث (اختياري)</option>
+                    <option value="سوداني">سودانيين</option>
+                    <option value="مصر">مصريين</option>
+                    <option value="أردني">أردنيين</option>
+                    <option value="سوري">سوريين</option>
+                </select>
+
+                <select id="freshness">
+                    <option value="">تاريخ النشر</option>
+                    <option value="24h">آخر 24 ساعة</option>
+                    <option value="week">آخر أسبوع</option>
+                </select>
+            </div>
+
+            <button id="searchButton">اكتشف الفرص الآن</button>
+        </section>
+    </section>
+
+    <section class="quick-search">
+        <h2>بحث سريع</h2>
+        <button onclick="fillQuickSearch('وظائف مبرمجين للسودانيين', 'السعودية', 'سوداني')">وظائف سودانيين بالسعودية</button>
+        <button onclick="fillQuickSearch('محاسب', 'الإمارات', 'مصر')">وظائف مصريين بالإمارات</button>
+        <button onclick="fillQuickSearch('تسويق', 'عن بعد', '')">وظائف تسويق عن بعد</button>
+        <button onclick="fillQuickSearch('تقنية معلومات', '', '')">وظائف تقنية</button>
+    </section>
+
+    <section class="trending">
+        <h2>الأكثر بحثاً</h2>
+        <ul>
+            <li>وظائف الخليج لحديثي التخرج</li>
+            <li>فرص عمل عن بعد بالدولار</li>
+            <li>وظائف تخصصات المحاسبة وإدارة الأعمال</li>
+        </ul>
+    </section>
+
+    <section class="ad-box">
+        مساحة إعلانية
+    </section>
+
+    <section id="results">
+        <h2>أفضل المصادر الذكية للتقديم المباشر</h2>
+        <div id="resultsContainer">
+            </div>
+    </section>
+
+    <section class="tips">
+        <h2>نصائح الباحث عن عمل</h2>
+        <p>قم بالتقديم على الوظائف المنشورة حديثاً (آخر 24 ساعة) لزيادة فرص التواصل معك من قبل مسؤولي التوظيف.</p>
+    </section>
+
+    <section class="ad-box">
+        مساحة إعلانية
+    </section>
+</main>
+
+<footer>
+    <p>© مورد الوظائف الذكي - Mawread Jobs Intelligence</p>
+</footer>
+
+<script src="js/config.js"></script>
+<script src="js/providers.js"></script>
+<script src="js/keywords.js"></script>
+<script src="js/app.js"></script>
+
+</body>
+</html>
