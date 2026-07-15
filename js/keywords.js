@@ -1,27 +1,92 @@
-// js/keywords.js
+/*
+Mawread Jobs Intelligence
+Keyword Intelligence v1.0
+*/
 
-const keywords = {
-    "محاسب": "Accountant",
-    "مدير مشاريع": "Project Manager",
-    "مهندس برمجيات": "Software Engineer",
-    "مطور ويب": "Web Developer",
-    "مصمم جرافيك": "Graphic Designer",
-    "مسوق رقمي": "Digital Marketer",
-    "مترجم": "Translator",
-    "كاتب محتوى": "Content Writer",
-    "ممثل خدمة عملاء": "Customer Service Representative",
-    "مدير مبيعات": "Sales Manager",
-    "محلل بيانات": "Data Analyst",
-    "مسؤول موارد بشرية": "HR Specialist",
-    "مهندس مدني": "Civil Engineer",
-    "مهندس كهرباء": "Electrical Engineer",
-    "طبيب": "Doctor",
-    "ممرض": "Nurse",
-    "صيدلي": "Pharmacist",
-    "مدرس": "Teacher",
-    "سائق": "Driver",
-    "أمين مستودع": "Warehouse Keeper"
-    // يمكنك إضافة أي مسميات وظيفية أخرى هنا بنفس الهيكل
+
+const JobKeywords = {
+
+
+    "مبرمج":
+    [
+        "Developer",
+        "Software Developer",
+        "Software Engineer",
+        "Programmer"
+    ],
+
+
+
+    "مهندس":
+    [
+        "Engineer",
+        "Engineering"
+    ],
+
+
+
+    "محاسب":
+    [
+        "Accountant",
+        "Accounting",
+        "Finance",
+        "Financial Analyst"
+    ],
+
+
+
+    "تسويق":
+    [
+        "Marketing",
+        "Digital Marketing",
+        "Marketing Specialist"
+    ],
+
+
+
+    "مصمم":
+    [
+        "Designer",
+        "Graphic Designer",
+        "UI Designer"
+    ],
+
+
+
+    "مدير":
+    [
+        "Manager",
+        "Project Manager",
+        "Operations Manager"
+    ],
+
+
+
+    "مبيعات":
+    [
+        "Sales",
+        "Sales Representative",
+        "Business Development"
+    ],
+
+
+
+    "موارد بشرية":
+    [
+        "Human Resources",
+        "HR",
+        "Recruiter"
+    ],
+
+
+
+    "تقنية معلومات":
+    [
+        "Information Technology",
+        "IT",
+        "IT Specialist"
+    ]
+
+
 };
 
-export default keywords;
