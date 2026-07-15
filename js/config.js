@@ -1,8 +1,83 @@
+/*
+Mawread Jobs Intelligence
+Configuration v1.0
+*/
+
+
 const MawreadConfig = {
-    siteName: "مورد الوظائف الذكي",
-    brandName: "Mawread Jobs Intelligence",
-    siteURL: "https://jobs.mawread.com",
-    defaultLanguage: "ar",
-    version: "1.1.0",
-    storageKey: "mawread_recent_searches"
+
+
+    // Identity
+
+    siteName:
+    "مورد الوظائف الذكي",
+
+
+    brandName:
+    "Mawread Jobs Intelligence",
+
+
+    siteURL:
+    "https://jobs.mawread.com",
+
+
+
+    // Language
+
+    defaultLanguage:
+    "ar",
+
+
+
+    supportedLanguages:
+    [
+        "ar",
+        "en"
+    ],
+
+
+
+    // Version
+
+    version:
+    "1.0.0",
+
+
+
+    // Search
+
+    defaultFreshness:
+    "24h",
+
+
+
+    maxResults:
+    5,
+
+
+
+    // Storage
+
+    storageKey:
+    "mawread_recent_searches",
+
+
+
+    // Features
+
+    features: {
+
+        localHistory:
+        true,
+
+        quickSearch:
+        true,
+
+        advancedFilters:
+        true
+
+    }
+
+
 };
+
