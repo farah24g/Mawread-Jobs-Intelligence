@@ -1,34 +1,176 @@
-// js/providers.js
+/*
+Mawread Jobs Intelligence
+Providers Database v1.0
+*/
 
-const providers = [
-    {
-        id: "linkedin",
-        name: "LinkedIn",
-        logo: "assets/logos/linkedin.svg",
-        searchTemplate: "https://www.linkedin.com/jobs/search/?keywords={keyword}&location={country}",
-        supportedCountries: ["egypt", "saudi", "uae", "qatar", "kuwait", "global"]
-    },
-    {
-        id: "bayt",
-        name: "Bayt.com",
-        logo: "assets/logos/bayt.svg",
-        searchTemplate: "https://www.bayt.com/en/jobs/?keyword={keyword}&country={country}",
-        supportedCountries: ["egypt", "saudi", "uae", "qatar", "kuwait"]
-    },
-    {
-        id: "indeed",
-        name: "Indeed",
-        logo: "assets/logos/indeed.svg",
-        searchTemplate: "https://www.indeed.com/jobs?q={keyword}&l={country}",
-        supportedCountries: ["egypt", "saudi", "uae", "global"]
-    },
-    {
-        id: "glassdoor",
-        name: "Glassdoor",
-        logo: "assets/logos/glassdoor.svg",
-        searchTemplate: "https://www.glassdoor.com/Job/jobs.htm?sc.keyword={keyword}",
-        supportedCountries: ["global"]
-    }
-];
 
-export default providers;
+const JobProviders = {
+
+
+    global: [
+
+        {
+
+            name:
+            "LinkedIn Jobs",
+
+            region:
+            "global",
+
+            countries:
+            [
+                "all"
+            ],
+
+
+            categories:
+            [
+                "technology",
+                "management",
+                "engineering",
+                "business"
+            ],
+
+
+            priority:
+            5,
+
+
+            reason:
+            "الأفضل للوظائف الاحترافية والشركات الكبرى",
+
+
+            url:
+            "https://www.linkedin.com/jobs/"
+
+        },
+
+
+        {
+
+            name:
+            "Indeed",
+
+
+            region:
+            "global",
+
+
+            countries:
+            [
+                "all"
+            ],
+
+
+            categories:
+            [
+                "general",
+                "remote"
+            ],
+
+
+            priority:
+            4,
+
+
+            reason:
+            "مصدر عالمي قوي للوظائف العامة",
+
+
+            url:
+            "https://www.indeed.com/"
+
+        }
+
+    ],
+
+
+
+    middleEast: [
+
+        {
+
+            name:
+            "Bayt",
+
+
+            region:
+            "middle-east",
+
+
+            countries:
+            [
+                "saudi",
+                "uae",
+                "egypt",
+                "qatar"
+            ],
+
+
+            categories:
+            [
+                "general",
+                "engineering",
+                "finance"
+            ],
+
+
+            priority:
+            4,
+
+
+            reason:
+            "من أكبر منصات الوظائف في الشرق الأوسط",
+
+
+            url:
+            "https://www.bayt.com/"
+
+        }
+
+    ],
+
+
+
+    remote: [
+
+        {
+
+            name:
+            "Remote Jobs",
+
+
+            region:
+            "remote",
+
+
+            countries:
+            [
+                "all"
+            ],
+
+
+            categories:
+            [
+                "remote"
+            ],
+
+
+            priority:
+            4,
+
+
+            reason:
+            "مناسب للباحثين عن العمل عن بعد",
+
+
+            url:
+            "https://remote.com/jobs"
+
+        }
+
+    ]
+
+
+};
+
