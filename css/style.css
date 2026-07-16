@@ -703,3 +703,30 @@ display:none;
 
 }
 
+/* تنسيقات فلاتر الإصدار v0.2 */
+.search-box {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 25px;
+    justify-content: center;
+}
+
+.search-box input, 
+.search-box select {
+    padding: 12px;
+    font-size: 14px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    background-color: #fff;
+    /* لجعل العناصر تتمدد بشكل متناسق وتنزل لسطر جديد في الشاشات الصغيرة */
+    flex: 1 1 160px; 
+    max-width: 100%;
+}
+
+.search-box input:focus, 
+.search-box select:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
