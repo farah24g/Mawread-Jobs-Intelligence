@@ -1,6 +1,6 @@
 /*
 Mawread Jobs Intelligence
-Smart Routing & Providers Config v2.2 [Stable Fix]
+Smart Routing & Providers Config v2.3 [Final Bayt Fix]
 */
 
 window.JobProviders = {
@@ -25,15 +25,11 @@ window.JobProviders = {
         buildUrl: function(params) {
             const baseUrl = this.domains[params.country] || this.domains.global;
             const queryParams = [];
-            
             if (params.keyword) queryParams.push(`q=${encodeURIComponent(params.keyword)}`);
             const loc = this.locationNames[params.country];
             if (loc) queryParams.push(`l=${encodeURIComponent(loc)}`);
-            
             if (params.workplace === "remote") queryParams.push("sc=0kf%3Aattr(DS79X)%3B");
             if (params.datePosted === "24h") queryParams.push("fromage=1");
-            else if (params.datePosted === "week") queryParams.push("fromage=7");
-            
             return `${baseUrl}?${queryParams.join("&")}`;
         }
     },
@@ -54,37 +50,35 @@ window.JobProviders = {
             if (params.keyword) queryParams.push(`keywords=${encodeURIComponent(params.keyword)}`);
             const loc = this.locationNames[params.country];
             if (loc) queryParams.push(`location=${encodeURIComponent(loc)}`);
-            
             if (params.workplace === "remote") queryParams.push("f_WT=2");
             if (params.datePosted === "24h") queryParams.push("f_TPR=r86400");
-            
             return `${this.baseUrl}?${queryParams.join("&")}`;
         }
     },
 
     bayt: {
         name: "Bayt.com",
-        baseUrl: "https://www.bayt.com/ar",
-        // تم تحديث المسارات الجغرافية لتطابق بنية بيت.كوم المستقرة
+        // تم التعديل بناءً على طلبك ليكون النطاق نظيفاً
+        baseUrl: "https://www.bayt.com", 
+        // تصحيح Slugs الدول لتطابق قاعدة بيانات بيت.كوم
         countryPaths: {
             saudi: "saudi-arabia",
             uae: "uae",
             egypt: "egypt",
             qatar: "qatar",
-            kuwait: "kuwait",
-            global: ""
+            kuwait: "kuwait"
         },
         buildUrl: function(params) {
-            const countrySlug = this.countryPaths[params.country] || "";
+            const countrySlug = this.countryPaths[params.country];
             const keyword = encodeURIComponent(params.keyword_ar || params.keyword);
             
+            // الصيغة الأكثر استقراراً في "بيت.كوم" للنتائج العربية المفلترة جغرافياً
             if (countrySlug) {
-                // الميزة الأقوى: التوجه الجغرافي لبيت (SEO Path)
-                // مثال: bayt.com/ar/saudi-arabia/jobs/محاسب-jobs/
-                return `${this.baseUrl}/${countrySlug}/jobs/${keyword}-jobs/`;
+                // ينتج: https://www.bayt.com/ar/saudi-arabia/jobs/محاسب-jobs/
+                return `${this.baseUrl}/ar/${countrySlug}/jobs/${keyword}-jobs/`;
             } else {
-                // محرك البحث العام في حال عدم اختيار دولة
-                return `${this.baseUrl}/search-jobs/?keyword=${keyword}`;
+                // البحث العام (عالمي)
+                return `${this.baseUrl}/ar/search-jobs/?keyword=${keyword}`;
             }
         }
     }
