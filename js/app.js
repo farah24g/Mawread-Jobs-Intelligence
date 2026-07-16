@@ -1,5 +1,6 @@
 // js/app-v2.js
 
+const searchForm = document.getElementById("searchForm"); // تحديد النموذج
 const jobKeywordInput = document.getElementById("jobKeyword");
 const countrySelect = document.getElementById("country");
 const workplaceSelect = document.getElementById("workplace");
@@ -8,6 +9,15 @@ const datePostedSelect = document.getElementById("datePosted");
 const resultsContainer = document.getElementById("resultsContainer");
 
 function init() {
+    // 1. إضافة مستمع لحدث "إرسال النموذج" لمنع إعادة تحميل الصفحة (حل المشكلة)
+    if (searchForm) {
+        searchForm.addEventListener("submit", (e) => {
+            e.preventDefault(); // منع المتصفح من إضافة ? وإعادة تحميل الصفحة
+            renderProviders();  // تنفيذ البحث يدوياً
+        });
+    }
+
+    // 2. مستمعات الأحداث للتحديث اللحظي أثناء الكتابة أو الاختيار
     if (jobKeywordInput) jobKeywordInput.addEventListener("input", renderProviders);
     if (countrySelect) countrySelect.addEventListener("change", renderProviders);
     if (workplaceSelect) workplaceSelect.addEventListener("change", renderProviders);
@@ -27,6 +37,7 @@ function renderProviders() {
     const jobTypeValue = jobTypeSelect ? jobTypeSelect.value : "all";
     const datePostedValue = datePostedSelect ? datePostedSelect.value : "all";
 
+    // عرض الرسالة الإرشادية إذا كان الحقل فارغاً
     if (!keywordValue) {
         resultsContainer.innerHTML = `
             <div class="no-results" style="grid-column: 1 / -1; text-align: center; padding: 30px; color: #64748b; background-color: #f1f5f9; border-radius: 10px; border: 1px dashed #cbd5e1;">
@@ -37,30 +48,27 @@ function renderProviders() {
     }
 
     const providersMap = window.JobProviders || {};
-    const allProviders = Object.keys(providersMap).map(key => {
-        return { id: key, ...providersMap[key] };
-    });
+    const allProviders = Object.keys(providersMap).map(key => ({ id: key, ...providersMap[key] }));
 
     allProviders.forEach(provider => {
         const card = document.createElement("div");
         card.className = "provider-card";
-
         card.innerHTML = `
             <h3>${provider.name}</h3>
             <p>البحث المباشر المفلتر في ${provider.name}</p>
-            <button class="search-btn">ابحث الآن</button>
+            <button type="button" class="search-btn">ابحث الآن</button>
         `;
 
         const searchButton = card.querySelector(".search-btn");
         if (searchButton) {
             searchButton.addEventListener("click", (e) => {
+                e.preventDefault(); 
                 e.stopPropagation();
 
-                // الترجمة الذكية باستخدام القاموس
                 const translatedKeyword = window.jobKeywordsMap ? (window.jobKeywordsMap[keywordValue] || keywordValue) : keywordValue;
 
                 const searchData = {
-                    keyword: translatedKeyword,       // للـ Indeed و LinkedIn
+                    keyword: translatedKeyword,       // لـ Indeed و LinkedIn
                     keyword_ar: keywordValue,         // لـ Bayt.com
                     country: countryValue,
                     workplace: workplaceValue,
