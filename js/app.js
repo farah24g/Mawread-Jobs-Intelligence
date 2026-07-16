@@ -1,88 +1,56 @@
-// js/app-v2.js
+// js/app.js
 
-const searchForm = document.getElementById("searchForm"); // تحديد النموذج
-const jobKeywordInput = document.getElementById("jobKeyword");
-const countrySelect = document.getElementById("country");
-const workplaceSelect = document.getElementById("workplace");
-const jobTypeSelect = document.getElementById("jobType");
-const datePostedSelect = document.getElementById("datePosted");
-const resultsContainer = document.getElementById("resultsContainer");
+document.addEventListener("DOMContentLoaded", function() {
+    const searchForm = document.getElementById("searchForm");
+    const jobKeywordInput = document.getElementById("jobKeyword");
 
-function init() {
-    // 1. إضافة مستمع لحدث "إرسال النموذج" لمنع إعادة تحميل الصفحة (حل المشكلة)
+    // الوظيفة المركزية لتنفيذ البحث
+    function performSearch() {
+        const kw = jobKeywordInput.value.trim();
+        const country = document.getElementById("country").value;
+        const workplace = "all"; // يمكن توسيعه لاحقاً
+        const jobType = document.getElementById("jobType").value;
+        const datePosted = document.getElementById("freshness").value;
+
+        if (!kw) {
+            alert("أدخل المسمى الوظيفي أولاً");
+            return;
+        }
+
+        // 1. الترجمة الذكية
+        const translated = window.MawreadTranslator ? window.MawreadTranslator.translate(kw) : kw;
+
+        // 2. تجهيز البيانات للمحرك
+        const searchData = {
+            keyword: translated,      // للـ Indeed و LinkedIn
+            keyword_ar: kw,           // لـ Bayt.com
+            country: country,
+            workplace: workplace,
+            jobType: jobType,
+            datePosted: datePosted
+        };
+
+        // 3. توليد النتائج
+        const results = window.MawreadSearchEngine.generateResults(searchData);
+        
+        // 4. عرض النتائج في الواجهة
+        window.MawreadUI.renderResults(results);
+    }
+
+    // منع المتصفح من إضافة ? وإعادة تحميل الصفحة عند الضغط على Enter أو الزر
     if (searchForm) {
-        searchForm.addEventListener("submit", (e) => {
-            e.preventDefault(); // منع المتصفح من إضافة ? وإعادة تحميل الصفحة
-            renderProviders();  // تنفيذ البحث يدوياً
+        searchForm.addEventListener("submit", function(e) {
+            e.preventDefault(); 
+            performSearch();
         });
     }
 
-    // 2. مستمعات الأحداث للتحديث اللحظي أثناء الكتابة أو الاختيار
-    if (jobKeywordInput) jobKeywordInput.addEventListener("input", renderProviders);
-    if (countrySelect) countrySelect.addEventListener("change", renderProviders);
-    if (workplaceSelect) workplaceSelect.addEventListener("change", renderProviders);
-    if (jobTypeSelect) jobTypeSelect.addEventListener("change", renderProviders);
-    if (datePostedSelect) datePostedSelect.addEventListener("change", renderProviders);
-
-    renderProviders();
-}
-
-function renderProviders() {
-    if (!resultsContainer) return;
-    resultsContainer.innerHTML = "";
-
-    const keywordValue = jobKeywordInput ? jobKeywordInput.value.trim() : "";
-    const countryValue = countrySelect ? countrySelect.value : "global";
-    const workplaceValue = workplaceSelect ? workplaceSelect.value : "all";
-    const jobTypeValue = jobTypeSelect ? jobTypeSelect.value : "all";
-    const datePostedValue = datePostedSelect ? datePostedSelect.value : "all";
-
-    // عرض الرسالة الإرشادية إذا كان الحقل فارغاً
-    if (!keywordValue) {
-        resultsContainer.innerHTML = `
-            <div class="no-results" style="grid-column: 1 / -1; text-align: center; padding: 30px; color: #64748b; background-color: #f1f5f9; border-radius: 10px; border: 1px dashed #cbd5e1;">
-                💡 اكتب المسمى الوظيفي أولاً في خانة البحث لاكتشاف الفرص المناسبة وتفعيل كروت المنصات.
-            </div>
-        `;
-        return;
-    }
-
-    const providersMap = window.JobProviders || {};
-    const allProviders = Object.keys(providersMap).map(key => ({ id: key, ...providersMap[key] }));
-
-    allProviders.forEach(provider => {
-        const card = document.createElement("div");
-        card.className = "provider-card";
-        card.innerHTML = `
-            <h3>${provider.name}</h3>
-            <p>البحث المباشر المفلتر في ${provider.name}</p>
-            <button type="button" class="search-btn">ابحث الآن</button>
-        `;
-
-        const searchButton = card.querySelector(".search-btn");
-        if (searchButton) {
-            searchButton.addEventListener("click", (e) => {
-                e.preventDefault(); 
-                e.stopPropagation();
-
-                const translatedKeyword = window.jobKeywordsMap ? (window.jobKeywordsMap[keywordValue] || keywordValue) : keywordValue;
-
-                const searchData = {
-                    keyword: translatedKeyword,       // لـ Indeed و LinkedIn
-                    keyword_ar: keywordValue,         // لـ Bayt.com
-                    country: countryValue,
-                    workplace: workplaceValue,
-                    jobType: jobTypeValue,
-                    datePosted: datePostedValue
-                };
-
-                const finalURL = provider.buildUrl(searchData);
-                window.open(finalURL, "_blank");
-            });
-        }
-
-        resultsContainer.appendChild(card);
+    // ربط أزرار البحث السريع
+    document.querySelectorAll('.quick-search-buttons button').forEach(btn => {
+        btn.addEventListener('click', () => {
+            jobKeywordInput.value = btn.dataset.keyword;
+            if(btn.dataset.country) document.getElementById('country').value = btn.dataset.country;
+            performSearch();
+        });
     });
-}
-
-document.addEventListener("DOMContentLoaded", init);
+});
