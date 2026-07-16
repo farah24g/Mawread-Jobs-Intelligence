@@ -1,92 +1,17 @@
 /*
 Mawread Jobs Intelligence
-Keyword Intelligence v1.0
+Keyword Intelligence v1.0 - Clean Map Edition
 */
 
-
-const JobKeywords = {
-
-
-    "مبرمج":
-    [
-        "Developer",
-        "Software Developer",
-        "Software Engineer",
-        "Programmer"
-    ],
-
-
-
-    "مهندس":
-    [
-        "Engineer",
-        "Engineering"
-    ],
-
-
-
-    "محاسب":
-    [
-        "Accountant",
-        "Accounting",
-        "Finance",
-        "Financial Analyst"
-    ],
-
-
-
-    "تسويق":
-    [
-        "Marketing",
-        "Digital Marketing",
-        "Marketing Specialist"
-    ],
-
-
-
-    "مصمم":
-    [
-        "Designer",
-        "Graphic Designer",
-        "UI Designer"
-    ],
-
-
-
-    "مدير":
-    [
-        "Manager",
-        "Project Manager",
-        "Operations Manager"
-    ],
-
-
-
-    "مبيعات":
-    [
-        "Sales",
-        "Sales Representative",
-        "Business Development"
-    ],
-
-
-
-    "موارد بشرية":
-    [
-        "Human Resources",
-        "HR",
-        "Recruiter"
-    ],
-
-
-
-    "تقنية معلومات":
-    [
-        "Information Technology",
-        "IT",
-        "IT Specialist"
-    ]
-
-
+// إسناد القاموس مباشرة إلى الـ window ليكون متاحاً عالمياً في المتصفح والملفات الأخرى
+window.jobKeywordsMap = {
+    "مبرمج": "Developer",
+    "مهندس": "Engineer",
+    "محاسب": "Accountant",
+    "تسويق": "Marketing",
+    "مصمم": "Designer",
+    "مدير": "Manager",
+    "مبيعات": "Sales",
+    "موارد بشرية": "Human Resources",
+    "تقنية معلومات": "IT"
 };
-
