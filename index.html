@@ -4,19 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>مورد الوظائف الذكي | البحث الذكي عن فرص العمل</title>
-    <meta name="description" content="مورد الوظائف الذكي يساعدك على اكتشاف أفضل منصات وفرص العمل حسب الدولة والتخصص وتاريخ النشر.">
-    <link rel="canonical" href="https://jobs.mawread.com/">
-    <meta name="robots" content="index, follow">
-
-    <!-- Open Graph -->
-    <meta property="og:title" content="مورد الوظائف الذكي">
-    <meta property="og:description" content="محرك ذكي لاكتشاف فرص العمل من أفضل المصادر المحلية والعالمية.">
-    <meta property="og:type" content="website">
-
-    <!-- Favicons -->
-    <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16.png">
-
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -25,82 +12,58 @@
         <nav>
             <a href="index.html" class="active">الرئيسية</a>
             <a href="pages/about.html">عن الأداة</a>
-            <a href="javascript:void(0);" style="opacity: 0.5; cursor: not-allowed;">English</a>
+            <a href="javascript:void(0);" style="opacity:0.5;">English</a>
         </nav>
     </header>
 
     <main>
         <section class="hero">
             <h1>اكتشف أفضل فرص العمل من مكان واحد</h1>
-            <p>ابحث حسب الوظيفة والدولة والتخصص، ونصل بك إلى أفضل منصات التوظيف المناسبة.</p>
-
-            <form id="searchForm" class="search-box" novalidate autocomplete="off">
-                <label for="jobKeyword">المسمى الوظيفي أو المهارة</label>
-                <input type="search" id="jobKeyword" placeholder="مثال: محاسب، مبرمج، مهندس" required spellcheck="false" autocapitalize="off">
-
+            <div class="search-box">
+                <input type="text" id="jobKeyword" placeholder="اكتب مسمى الوظيفة (مثال: محاسب)...">
                 <div class="filters">
                     <select id="country">
-                        <option value="global">كل الدول</option>
-                        <option value="saudi">السعودية</option>
-                        <option value="uae">الإمارات</option>
-                        <option value="egypt">مصر</option>
+                        <option value="global">عالمي (كل الدول)</option>
+                        <option value="egypt">جمهورية مصر العربية</option>
+                        <option value="saudi">المملكة العربية السعودية</option>
+                        <option value="uae">الإمارات العربية المتحدة</option>
+                        <option value="qatar">دولة قطر</option>
+                        <option value="kuwait">دولة الكويت</option>
+                    </select>
+
+                    <select id="workplace">
+                        <option value="all">كل بيئات العمل</option>
+                        <option value="remote">عمل عن بعد (Remote)</option>
+                        <option value="onsite">من موقع العمل (On-site)</option>
+                        <option value="hybrid">هجين (Hybrid)</option>
                     </select>
 
                     <select id="jobType">
-                        <option value="all">نوع العمل</option>
-                        <option value="fulltime">دوام كامل</option>
-                        <option value="remote">عن بعد</option>
-                        <option value="parttime">دوام جزئي</option>
+                        <option value="all">كل أنواع الدوام</option>
+                        <option value="fulltime">دوام كامل (Full-time)</option>
+                        <option value="parttime">دوام جزئي (Part-time)</option>
                     </select>
 
-                    <select id="freshness">
-                        <option value="all">تاريخ النشر</option>
+                    <!-- تأكد أن الـ ID هو datePosted ليعمل المحرك -->
+                    <select id="datePosted">
+                        <option value="all">أي وقت</option>
                         <option value="24h">آخر 24 ساعة</option>
+                        <option value="3d">آخر 3 أيام</option>
                         <option value="week">آخر أسبوع</option>
                     </select>
                 </div>
-                <button id="searchButton" type="submit">اكتشف الفرص</button>
-            </form>
-        </section>
-
-        <section class="quick-search">
-            <h2>بحث سريع</h2>
-            <div class="quick-search-buttons">
-                <button type="button" data-keyword="Software Engineer" data-country="saudi">وظائف السعودية</button>
-                <button type="button" data-keyword="Software Engineer" data-country="uae">وظائف الإمارات</button>
-                <button type="button" data-keyword="Software Engineer" data-workplace="remote">وظائف عن بعد</button>
-                <button type="button" data-keyword="Mechanical Engineer">وظائف تقنية</button>
             </div>
         </section>
 
-        <aside class="ad-box" id="adSlot1">مساحة إعلانية</aside>
-
-        <section id="results" hidden aria-hidden="true">
-            <h2>أفضل المصادر للبحث عن وظيفتك</h2>
-            <div id="loadingState" hidden aria-hidden="true">
-                <p>جارٍ البحث عن أفضل الفرص... ⏳</p>
+        <section id="results">
+            <div id="resultsContainer" class="providers-grid">
+                <!-- النتائج تظهر هنا تلقائياً بمجرد الكتابة -->
             </div>
-            <div id="resultsContainer" class="providers-grid"></div>
         </section>
-
-        <section class="tips">
-            <h2>نصائح الباحث عن عمل</h2>
-            <p>حدّث سيرتك الذاتية باستمرار وتابع الفرص الجديدة يومياً.</p>
-        </section>
-        
-        <aside class="ad-box" id="adSlot2">مساحة إعلانية</aside>
     </main>
 
-    <footer>
-        <p>© مورد الوظائف الذكي - Mawread Jobs Intelligence</p>
-    </footer>
-
-    <!-- ترتيب التحميل الصارم لضمان عدم وجود أخطاء undefined -->
-    <script src="js/config.js"></script>
-    <script src="js/loader.js"></script>
     <script src="js/keywords.js"></script>
-    <script src="js/providers.js"></script>
-    <script src="js/ui.js"></script>
-    <script src="js/app.js"></script>
+    <script src="js/providers-v2.js"></script>
+    <script src="js/app-v2.js"></script>
 </body>
 </html>
