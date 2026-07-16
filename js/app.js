@@ -4,21 +4,29 @@ document.addEventListener("DOMContentLoaded", function() {
 
     form.addEventListener("submit", function(e) {
         e.preventDefault();
-        const kw = document.getElementById("jobKeyword").value;
+        const kw = document.getElementById("jobKeyword").value.trim();
         const country = document.getElementById("country").value;
 
-        if (!kw) return alert("أدخل المسمى الوظيفي");
+        if (!kw) return alert("أدخل المسمى الوظيفي أولاً");
 
+        // استدعاء المترجم الذكي
         const translated = window.MawreadTranslator.translate(kw);
+        
+        if (window.CONFIG.debug) {
+            console.log(`Original: ${kw} | Translated: ${translated}`);
+        }
+
+        // إرسال الكلمتين للمحرك
         const results = window.MawreadSearchEngine.generateResults(kw, translated, country);
         
         window.MawreadUI.renderResults(results);
     });
 
-    // البحث السريع
+    // ربط أزرار البحث السريع
     document.querySelectorAll('.quick-search-buttons button').forEach(btn => {
         btn.addEventListener('click', () => {
-            document.getElementById('jobKeyword').value = btn.dataset.keyword;
+            const keyword = btn.dataset.keyword;
+            document.getElementById('jobKeyword').value = keyword;
             if(btn.dataset.country) document.getElementById('country').value = btn.dataset.country;
             form.dispatchEvent(new Event('submit'));
         });
