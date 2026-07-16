@@ -1,6 +1,6 @@
 /*
 Mawread Jobs Intelligence
-Smart Routing & Providers Config v2.3 [Final Bayt Fix]
+Smart Routing & Providers Config v2.4 [Integrated Stable Version]
 */
 
 window.JobProviders = {
@@ -58,28 +58,44 @@ window.JobProviders = {
 
     bayt: {
         name: "Bayt.com",
-        // تم التعديل بناءً على طلبك ليكون النطاق نظيفاً
-        baseUrl: "https://www.bayt.com", 
-        // تصحيح Slugs الدول لتطابق قاعدة بيانات بيت.كوم
+        baseUrl: "https://www.bayt.com/en",
+        // بيت دوت كوم يعتمد على بنية روابط مجلدات متغيرة لكل دولة
         countryPaths: {
-            saudi: "saudi-arabia",
-            uae: "uae",
-            egypt: "egypt",
-            qatar: "qatar",
-            kuwait: "kuwait"
+            global: "international/jobs",
+            egypt: "egypt/jobs",
+            saudi: "saudi-arabia/jobs",
+            uae: "uae/jobs",
+            qatar: "qatar/jobs",
+            kuwait: "kuwait/jobs"
         },
         buildUrl: function(params) {
-            const countrySlug = this.countryPaths[params.country];
-            const keyword = encodeURIComponent(params.keyword_ar || params.keyword);
+            const path = this.countryPaths[params.country] || this.countryPaths.global;
+            let url = `${this.baseUrl}/${path}/`;
             
-            // الصيغة الأكثر استقراراً في "بيت.كوم" للنتائج العربية المفلترة جغرافياً
-            if (countrySlug) {
-                // ينتج: https://www.bayt.com/ar/saudi-arabia/jobs/محاسب-jobs/
-                return `${this.baseUrl}/ar/${countrySlug}/jobs/${keyword}-jobs/`;
-            } else {
-                // البحث العام (عالمي)
-                return `${this.baseUrl}/ar/search-jobs/?keyword=${keyword}`;
+            const queryParams = [];
+            
+            // الكلمة المفتاحية (تفضل العربية في بيت دوت كوم)
+            if (params.keyword_ar) {
+                url += `${encodeURIComponent(params.keyword_ar)}-jobs/`;
             }
+            
+            // فلاتر الدوام وبيئة العمل
+            if (params.jobType === "fulltime") {
+                queryParams.push("jb_f_job_type[]=1");
+            } else if (params.jobType === "parttime") {
+                queryParams.push("jb_f_job_type[]=2");
+            }
+            
+            // تاريخ النشر
+            if (params.datePosted === "24h") {
+                queryParams.push("minsince=1440");
+            } else if (params.datePosted === "3d") {
+                queryParams.push("minsince=4320");
+            } else if (params.datePosted === "week") {
+                queryParams.push("minsince=10080");
+            }
+            
+            return queryParams.length > 0 ? `${url}?${queryParams.join("&")}` : url;
         }
     }
 };
