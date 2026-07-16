@@ -1,176 +1,33 @@
-/*
-Mawread Jobs Intelligence
-Providers Database v1.0
-*/
-
-
-const JobProviders = {
-
-
-    global: [
-
+// js/providers.js
+window.MawreadSearchEngine = {
+    PROVIDERS: [
         {
-
-            name:
-            "LinkedIn Jobs",
-
-            region:
-            "global",
-
-            countries:
-            [
-                "all"
-            ],
-
-
-            categories:
-            [
-                "technology",
-                "management",
-                "engineering",
-                "business"
-            ],
-
-
-            priority:
-            5,
-
-
-            reason:
-            "الأفضل للوظائف الاحترافية والشركات الكبرى",
-
-
-            url:
-            "https://www.linkedin.com/jobs/"
-
+            name: "LinkedIn",
+            priority: 100,
+            buildUrl: (q, country) => {
+                let url = `https://www.linkedin.com/jobs/search/?keywords=${encodeURIComponent(q)}`;
+                if (country !== 'global') url += `&location=${encodeURIComponent(country)}`;
+                return url;
+            }
         },
-
-
         {
-
-            name:
-            "Indeed",
-
-
-            region:
-            "global",
-
-
-            countries:
-            [
-                "all"
-            ],
-
-
-            categories:
-            [
-                "general",
-                "remote"
-            ],
-
-
-            priority:
-            4,
-
-
-            reason:
-            "مصدر عالمي قوي للوظائف العامة",
-
-
-            url:
-            "https://www.indeed.com/"
-
+            name: "Indeed",
+            priority: 90,
+            buildUrl: (q, country) => `https://www.indeed.com/jobs?q=${encodeURIComponent(q)}&l=${country}`
+        },
+        {
+            name: "Bayt",
+            priority: 85,
+            buildUrl: (q, country) => `https://www.bayt.com/ar/search-jobs/?keyword=${encodeURIComponent(q)}`
         }
-
     ],
-
-
-
-    middleEast: [
-
-        {
-
-            name:
-            "Bayt",
-
-
-            region:
-            "middle-east",
-
-
-            countries:
-            [
-                "saudi",
-                "uae",
-                "egypt",
-                "qatar"
-            ],
-
-
-            categories:
-            [
-                "general",
-                "engineering",
-                "finance"
-            ],
-
-
-            priority:
-            4,
-
-
-            reason:
-            "من أكبر منصات الوظائف في الشرق الأوسط",
-
-
-            url:
-            "https://www.bayt.com/"
-
-        }
-
-    ],
-
-
-
-    remote: [
-
-        {
-
-            name:
-            "Remote Jobs",
-
-
-            region:
-            "remote",
-
-
-            countries:
-            [
-                "all"
-            ],
-
-
-            categories:
-            [
-                "remote"
-            ],
-
-
-            priority:
-            4,
-
-
-            reason:
-            "مناسب للباحثين عن العمل عن بعد",
-
-
-            url:
-            "https://remote.com/jobs"
-
-        }
-
-    ]
-
-
+    generateResults: function(keyword, translated, country) {
+        const q = translated || keyword;
+        return this.PROVIDERS.map(p => ({
+            name: p.name,
+            url: p.buildUrl(q, country),
+            priority: p.priority
+        })).sort((a, b) => b.priority - a.priority);
+    }
 };
-
+Object.freeze(window.MawreadSearchEngine);
