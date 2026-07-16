@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مختبر التطوير (v2) | بوابة التوظيف الذكي</title>
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="container">
+        
+        <div class="search-box">
+            
+            <input type="text" id="jobKeyword" placeholder="اكتب مسمى الوظيفة (مثال: محاسب)...">
+
+            <select id="country">
+                <option value="global">عالمي (كل الدول)</option>
+                <option value="egypt">جمهورية مصر العربية</option>
+                <option value="saudi">المملكة العربية السعودية</option>
+                <option value="uae">الإمارات العربية المتحدة</option>
+                <option value="qatar">دولة قطر</option>
+                <option value="kuwait">دولة الكويت</option>
+            </select>
+
+            <select id="workplace">
+                <option value="all">كل بيئات العمل</option>
+                <option value="remote">عمل عن بعد (Remote)</option>
+                <option value="onsite">من موقع العمل (On-site)</option>
+                <option value="hybrid">هجين (Hybrid)</option>
+            </select>
+
+            <select id="jobType">
+                <option value="all">كل أنواع الدوام</option>
+                <option value="fulltime">دوام كامل (Full-time)</option>
+                <option value="parttime">دوام جزئي (Part-time)</option>
+            </select>
+
+            <select id="datePosted">
+                <option value="all">أي وقت</option>
+                <option value="24h">آخر 24 ساعة (اليوم)</option>
+                <option value="3d">آخر 3 أيام</option>
+                <option value="week">آخر أسبوع</option>
+            </select>
+
+        </div>
+
+        <div id="resultsContainer" class="providers-grid">
+            </div>
+
+    </div>
+
+    <script src="js/keywords.js"></script>
+    <script src="js/providers-v2.js"></script>
+    <script src="js/app-v2.js"></script>
+
+</body>
+</html>
