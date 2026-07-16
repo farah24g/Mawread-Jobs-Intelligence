@@ -1,17 +1,15 @@
-/*
-Mawread Jobs Intelligence
-Keyword Intelligence v1.0 - Clean Map Edition
-*/
-
-// إسناد القاموس مباشرة إلى الـ window ليكون متاحاً عالمياً في المتصفح والملفات الأخرى
-window.jobKeywordsMap = {
-    "مبرمج": "Developer",
-    "مهندس": "Engineer",
-    "محاسب": "Accountant",
-    "تسويق": "Marketing",
-    "مصمم": "Designer",
-    "مدير": "Manager",
-    "مبيعات": "Sales",
-    "موارد بشرية": "Human Resources",
-    "تقنية معلومات": "IT"
+// js/keywords.js
+window.MawreadTranslator = {
+    DICTIONARY: {
+        "مبرمج": "Developer",
+        "مهندس": "Engineer",
+        "محاسب": "Accountant",
+        "تسويق": "Marketing",
+        "مصمم": "Designer",
+        "موارد بشرية": "Human Resources"
+    },
+    translate: function(keyword) {
+        return this.DICTIONARY[keyword.trim()] || keyword;
+    }
 };
+Object.freeze(window.MawreadTranslator);
