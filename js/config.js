@@ -1,83 +1,17 @@
-/*
-Mawread Jobs Intelligence
-Configuration v1.0
-*/
-
-
-const MawreadConfig = {
-
-
-    // Identity
-
-    siteName:
-    "مورد الوظائف الذكي",
-
-
-    brandName:
-    "Mawread Jobs Intelligence",
-
-
-    siteURL:
-    "https://jobs.mawread.com",
-
-
-
-    // Language
-
-    defaultLanguage:
-    "ar",
-
-
-
-    supportedLanguages:
-    [
-        "ar",
-        "en"
-    ],
-
-
-
-    // Version
-
-    version:
-    "1.0.0",
-
-
-
-    // Search
-
-    defaultFreshness:
-    "24h",
-
-
-
-    maxResults:
-    5,
-
-
-
-    // Storage
-
-    storageKey:
-    "mawread_recent_searches",
-
-
-
-    // Features
-
-    features: {
-
-        localHistory:
-        true,
-
-        quickSearch:
-        true,
-
-        advancedFilters:
-        true
-
+// js/config.js
+window.CONFIG = {
+    environment: "production",
+    debug: false,
+    analytics: { id: "", enabled: false },
+    adsense: {
+        client: "", // ca-pub-XXXX
+        enabled: false,
+        slots: [
+            { id: 'adSlot1', slotId: 'XXXX1' },
+            { id: 'adSlot2', slotId: 'XXXX2' }
+        ]
     }
-
-
 };
 
+// تجميد الإعدادات لحمايتها
+Object.freeze(window.CONFIG);
