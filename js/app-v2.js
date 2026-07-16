@@ -37,11 +37,20 @@ function renderProviders() {
         return; // نتوقف هنا لمنع عرض الكروت بحالتها المعطلة ومساعدة المستخدم فوراً
     }
 
-    const allProviders = window.jobProviders || [];
+    // جلب كائن المنصات الجديد من window.JobProviders أو التراجع لكائن فارغ
+    const providersMap = window.JobProviders || {};
+    
+    // تحويل كائن المنصات إلى مصفوفة للتمكن من فلترتها وعرضها
+    const allProviders = Object.keys(providersMap).map(key => {
+        return {
+            id: key,
+            ...providersMap[key]
+        };
+    });
 
-    const activeProviders = allProviders.filter(provider => 
-        provider.supportedCountries.includes(countryValue)
-    );
+    // فلترة المنصات بناءً على الدول المدعومة (إذا كانت المنصة تحتوي على محدد جغرافي خاص بها)
+    // جميع منصاتنا الحالية (Indeed, LinkedIn, Bayt) تدعم الفلترة الجغرافية لهذه الدول، لذا سنعرضها مباشرة
+    const activeProviders = allProviders;
 
     if (activeProviders.length === 0) {
         resultsContainer.innerHTML = `<p class="no-results" style="grid-column: 1 / -1; text-align: center; padding: 20px;">لا توجد منصات تدعم الدولة المحددة حالياً.</p>`;
@@ -58,21 +67,26 @@ function renderProviders() {
             <button class="search-btn">ابحث الآن</button>
         `;
 
-        // 2. التعديل الذكي: ربط حدث النقر بالزر (search-btn) فقط بدلاً من الكارت بالكامل
+        // 2. التعديل الذكي: ربط حدث النقر بالزر (search-btn) وتجهيز معاملات التوجيه الجغرافي والترجمة الذكية
         const searchButton = card.querySelector(".search-btn");
         if (searchButton) {
             searchButton.addEventListener("click", (e) => {
                 e.stopPropagation(); // منع حدوث أي Bubbling للحدث
 
+                // البحث عن الترجمة الإنجليزية للكلمة المكتوبة، وإذا لم تكن مسجلة نستخدم الكلمة الأصلية
+                const translatedKeyword = window.jobKeywordsMap ? (window.jobKeywordsMap[keywordValue] || keywordValue) : keywordValue;
+
                 const searchData = {
-                    keyword: keywordValue,
+                    keyword: translatedKeyword,       // الكلمة المترجمة للإنجليزية لـ Indeed و LinkedIn
+                    keyword_ar: keywordValue,         // الكلمة العربية الأصلية لـ Bayt.com
                     country: countryValue,
                     workplace: workplaceValue,
                     jobType: jobTypeValue,
                     datePosted: datePostedValue
                 };
 
-                const finalURL = provider.buildURL(searchData);
+                // استدعاء دالة بناء الرابط بالاسم الموحد الجديد
+                const finalURL = provider.buildUrl(searchData);
                 window.open(finalURL, "_blank");
             });
         }
